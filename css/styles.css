@@ -11517,6 +11517,112 @@ body {
   }
 }
 
+/* Enchanted pricing */
+.legacy-service-grid { display: none; }
+.price-spellbook {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+  margin-top: 2rem;
+}
+.price-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.65rem;
+  border: 1px solid rgba(226, 196, 255, .24);
+  border-radius: 1.4rem;
+  background: linear-gradient(145deg, rgba(52, 28, 72, .78), rgba(23, 13, 36, .8));
+  box-shadow: inset 0 1px rgba(255,255,255,.08), 0 18px 50px rgba(8, 4, 15, .24);
+  transition: transform .45s ease, border-color .45s ease, box-shadow .45s ease;
+}
+.price-card::after {
+  content: "";
+  position: absolute;
+  width: 11rem; height: 11rem; right: -5rem; top: -6rem;
+  border-radius: 50%;
+  background: rgba(198, 144, 255, .18);
+  filter: blur(25px);
+}
+.price-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(244, 216, 168, .52);
+  box-shadow: inset 0 1px rgba(255,255,255,.1), 0 24px 65px rgba(8, 4, 15, .38);
+}
+.price-card-wide { grid-column: 1 / -1; }
+.price-card__heading { position: relative; z-index: 1; margin-bottom: 1.1rem; }
+.price-card__heading > svg { color: #e7c98f; font-size: 1.1rem; margin-bottom: .65rem; }
+.price-card__heading h3 { margin: 0; color: #fff4df; font-family: "Cormorant Garamond", serif; font-size: 1.75rem; }
+.price-card__heading small { color: rgba(239, 224, 245, .66); letter-spacing: .08em; text-transform: uppercase; font-size: .66rem; }
+.price-list { position: relative; z-index: 1; margin: 0; }
+.price-list div { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: .57rem 0; border-bottom: 1px dotted rgba(238, 214, 255, .2); }
+.price-list div:last-child { border-bottom: 0; }
+.price-list dt { color: rgba(255, 247, 255, .84); font-weight: 400; }
+.price-list dt small { display: block; color: rgba(255,255,255,.48); font-size: .68rem; text-transform: uppercase; }
+.price-list dd { margin: 0; color: #f2d59f; font-family: "Cormorant Garamond", serif; font-size: 1.3rem; font-weight: 600; }
+.press-on-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+/* Standalone enchanted information pages */
+.inner-page { min-height: 100vh; color: #f9eefb; background: #150d20; }
+.inner-page .navbar { background: rgba(17, 9, 29, .72); backdrop-filter: blur(18px); }
+.inner-page-main {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 9rem 1.2rem 6rem;
+  display: grid;
+  place-items: center;
+  background-position: center;
+  background-size: cover;
+  isolation: isolate;
+}
+.inner-page-main::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(16,8,26,.38), rgba(20,10,31,.72) 75%, #150d20);
+  backdrop-filter: blur(1px);
+}
+.inner-page-main::after {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(circle at 50% 28%, rgba(249, 222, 244, .2), transparent 34%);
+  animation: pageGlow 7s ease-in-out infinite;
+}
+.silent-page { background-image: url("../assets/img/silent-appointment.jpg"); }
+.policies-page { background-image: url("../assets/img/policies.png"); }
+.info-page-card {
+  width: min(860px, 94vw);
+  padding: clamp(2rem, 5vw, 4.5rem);
+  border: 1px solid rgba(239, 210, 161, .55);
+  border-radius: 2.2rem;
+  background: linear-gradient(145deg, rgba(50, 31, 65, .78), rgba(25, 14, 39, .87));
+  box-shadow: 0 35px 100px rgba(3,0,8,.55), inset 0 1px rgba(255,255,255,.12);
+  backdrop-filter: blur(18px);
+  text-align: center;
+}
+.info-page-card .portfolio-kicker { color: #e8cb98; }
+.info-page-card h1 { margin: .5rem 0 1rem; font: 500 clamp(3rem, 8vw, 6rem)/.92 "Cormorant Garamond", serif; color: #fff1e3; }
+.info-page-card h1 em { display: block; font-family: "Great Vibes", cursive; font-weight: 400; color: #e8c8ee; }
+.info-page-lead { max-width: 660px; margin: 0 auto 2rem; font-size: 1.1rem; color: rgba(255,245,255,.82); }
+.quiet-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; margin: 1.7rem 0 2.2rem; }
+.quiet-option { padding: 1.1rem .8rem; border: 1px solid rgba(222,188,244,.22); border-radius: 1rem; background: rgba(18,9,28,.38); }
+.quiet-option svg { color: #f0d59f; margin-bottom: .55rem; }
+.quiet-option strong { display:block; font-family: "Cormorant Garamond", serif; font-size: 1.15rem; color: #fff4e8; }
+.policy-list { margin: 2rem 0; padding: 0; list-style: none; display: grid; gap: .85rem; text-align: left; }
+.policy-list li { position: relative; padding: 1rem 1rem 1rem 3rem; border-radius: 1rem; background: rgba(17,8,27,.42); border: 1px solid rgba(224,194,244,.16); color: rgba(255,246,255,.82); }
+.policy-list li::before { content: "✦"; position: absolute; left: 1.15rem; top: 1rem; color: #e7ca92; }
+.policy-highlight { color: #f2d69f; font-weight: 700; }
+.info-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:.8rem; }
+.info-actions .btn { min-width: 190px; }
+.inner-page-footer { padding: 2rem; text-align:center; color: rgba(255,255,255,.56); background:#150d20; }
+@keyframes pageGlow { 50% { opacity: .55; transform: scale(1.08); } }
+
+@media (max-width: 767px) {
+  .price-spellbook, .press-on-pricing, .quiet-options { grid-template-columns: 1fr; }
+  .price-card-wide { grid-column: auto; }
+  .inner-page-main { padding-top: 7.5rem; }
+  .info-page-card { border-radius: 1.4rem; padding: 1.6rem; }
+}
+
 /* ===== Enchanted preloader + final website chapters ===== */
 html {
   scroll-behavior: smooth;
