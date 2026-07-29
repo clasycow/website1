@@ -15,6 +15,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+        <script src="js/config.js"></script>
     </head>
     <body class="is-loading" id="page-top">
         <div class="enchanted-preloader" id="enchantedPreloader" role="status" aria-live="polite" aria-label="Loading Numen Nails">
@@ -603,8 +605,7 @@
                             </div>
                         </aside>
 
-                        <!-- Add her real booking email to data-booking-email to activate email delivery. -->
-                        <form class="booking-form ending-reveal" id="bookingForm" data-booking-email="" novalidate>
+                        <form class="booking-form ending-reveal" id="bookingForm" action="/api/inquiry" method="post" enctype="multipart/form-data" novalidate>
                             <div class="booking-form-heading">
                                 <div>
                                     <span class="ending-kicker">Send an inquiry</span>
@@ -651,10 +652,30 @@
                                     <textarea name="message" id="bookingMessage" rows="5" maxlength="700" placeholder="Colors, shape, length, date, inspiration, charms—tell me everything..." required></textarea>
                                     <small class="character-count"><span id="messageCount">0</span>/700</small>
                                 </label>
+                                <div class="vision-upload enchanted-field enchanted-field-full">
+                                    <span>Inspiration photos <small>optional · up to 5</small></span>
+                                    <label class="vision-dropzone" for="visionPhotos">
+                                        <input id="visionPhotos" name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+                                        <span class="vision-dropzone__icon"><i class="far fa-images" aria-hidden="true"></i></span>
+                                        <strong>Add your inspiration</strong>
+                                        <small>Choose up to five JPG, PNG, or WebP images. 4 MB each.</small>
+                                    </label>
+                                    <div class="vision-previews" id="visionPreviews" aria-live="polite"></div>
+                                    <p class="vision-upload-note">
+                                        <i class="fas fa-shield-heart" aria-hidden="true"></i>
+                                        Photos are privately screened for unsafe content before delivery.
+                                    </p>
+                                </div>
+                                <div class="inquiry-challenge enchanted-field-full" id="inquiryChallenge" aria-label="Spam protection"></div>
+                                <label class="inquiry-honeypot" aria-hidden="true">
+                                    Leave this field empty
+                                    <input name="website" type="text" tabindex="-1" autocomplete="off" />
+                                </label>
+                                <input id="inquiryStartedAt" name="startedAt" type="hidden" />
                             </div>
 
                             <div class="booking-form-footer">
-                                <p><i class="fas fa-shield-heart" aria-hidden="true"></i> Your details stay private.</p>
+                                <p><i class="fas fa-shield-heart" aria-hidden="true"></i> Private, encrypted, and protected from spam.</p>
                                 <button class="enchanted-submit" type="submit">
                                     Send my vision
                                     <span><i class="fas fa-arrow-right" aria-hidden="true"></i></span>

@@ -14983,6 +14983,148 @@ a.contact-method:hover {
   font-size: 0.58rem;
 }
 
+.vision-upload > span small {
+  color: rgba(244, 230, 239, 0.38);
+  font-size: inherit;
+}
+
+.vision-dropzone {
+  display: grid;
+  place-items: center;
+  min-height: 10.5rem;
+  padding: 1.35rem;
+  text-align: center;
+  border: 1px dashed rgba(231, 198, 154, 0.38);
+  border-radius: 1.15rem;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(198, 151, 218, 0.1), transparent 58%),
+    rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+}
+
+.vision-dropzone:hover,
+.vision-dropzone:focus-within {
+  border-color: rgba(239, 208, 159, 0.72);
+  background-color: rgba(255, 255, 255, 0.045);
+  transform: translateY(-2px);
+}
+
+.vision-dropzone input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vision-dropzone__icon {
+  display: grid;
+  place-items: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  margin-bottom: 0.55rem;
+  color: #edd09e;
+  border: 1px solid rgba(237, 208, 158, 0.25);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 1.15rem;
+}
+
+.vision-dropzone strong {
+  color: #fff4e9;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.vision-dropzone > small {
+  margin-top: 0.18rem;
+  color: rgba(247, 234, 242, 0.44);
+  font-family: "Nunito", sans-serif;
+  font-size: 0.67rem;
+}
+
+.vision-previews {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.vision-preview {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(239, 215, 249, 0.18);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.vision-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vision-preview__remove {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: rgba(25, 14, 32, 0.82);
+}
+
+.vision-preview-count {
+  grid-column: 1 / -1;
+  margin: 0.1rem 0 0;
+  color: rgba(247, 234, 242, 0.42);
+  font-family: "Nunito", sans-serif;
+  font-size: 0.65rem;
+}
+
+.vision-upload-note {
+  margin: 0.65rem 0 0;
+  color: rgba(247, 234, 242, 0.42);
+  font-family: "Nunito", sans-serif;
+  font-size: 0.64rem;
+}
+
+.vision-upload-note i {
+  margin-right: 0.3rem;
+  color: rgba(233, 204, 158, 0.72);
+}
+
+.inquiry-challenge {
+  min-height: 65px;
+  overflow: hidden;
+}
+
+.inquiry-honeypot {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+.enchanted-submit:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.enchanted-submit.is-sending > span {
+  animation: preloader-star-pulse 1s ease-in-out infinite;
+}
+
 .booking-form-footer {
   position: relative;
   display: flex;
@@ -15294,6 +15436,10 @@ a.contact-method:hover {
   .booking-form-footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .vision-previews {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .enchanted-submit {

@@ -330,6 +330,103 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (bookingForm && bookingStatus) {
         const requiredFields = Array.from(bookingForm.querySelectorAll('[required]'));
+        const photoInput = bookingForm.querySelector('#visionPhotos');
+        const photoPreviews = bookingForm.querySelector('#visionPreviews');
+        const startedAtInput = bookingForm.querySelector('#inquiryStartedAt');
+        const submitButton = bookingForm.querySelector('.enchanted-submit');
+        const challenge = bookingForm.querySelector('#inquiryChallenge');
+        const maxPhotos = 5;
+        const maxPhotoBytes = 4 * 1024 * 1024;
+        const acceptedPhotoTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
+        let selectedPhotos = [];
+        let turnstileWidgetId = null;
+
+        if (startedAtInput) startedAtInput.value = String(Date.now());
+
+        const turnstileSiteKey = window.NUMEN_CONFIG?.turnstileSiteKey?.trim();
+        const renderTurnstile = () => {
+            if (!challenge || !turnstileSiteKey || !window.turnstile || turnstileWidgetId !== null) return;
+            turnstileWidgetId = window.turnstile.render(challenge, {
+                sitekey: turnstileSiteKey,
+                theme: 'dark',
+                size: 'flexible',
+            });
+        };
+
+        if (turnstileSiteKey) {
+            const turnstileTimer = window.setInterval(() => {
+                renderTurnstile();
+                if (turnstileWidgetId !== null) window.clearInterval(turnstileTimer);
+            }, 250);
+            window.setTimeout(() => window.clearInterval(turnstileTimer), 10000);
+        } else if (challenge) {
+            challenge.hidden = true;
+        }
+
+        const updatePhotoInput = () => {
+            if (!photoInput || typeof DataTransfer === 'undefined') return;
+            const transfer = new DataTransfer();
+            selectedPhotos.forEach((file) => transfer.items.add(file));
+            photoInput.files = transfer.files;
+        };
+
+        const renderPhotoPreviews = () => {
+            if (!photoPreviews) return;
+            photoPreviews.replaceChildren();
+            selectedPhotos.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'vision-preview';
+
+                const image = document.createElement('img');
+                image.alt = `Selected inspiration ${index + 1}`;
+                image.src = URL.createObjectURL(file);
+                image.addEventListener('load', () => URL.revokeObjectURL(image.src), { once: true });
+
+                const remove = document.createElement('button');
+                remove.type = 'button';
+                remove.className = 'vision-preview__remove';
+                remove.setAttribute('aria-label', `Remove ${file.name}`);
+                remove.innerHTML = '<i class="fas fa-xmark" aria-hidden="true"></i>';
+                remove.addEventListener('click', () => {
+                    selectedPhotos.splice(index, 1);
+                    updatePhotoInput();
+                    renderPhotoPreviews();
+                    bookingStatus.textContent = '';
+                    bookingStatus.classList.remove('is-error');
+                });
+
+                item.append(image, remove);
+                photoPreviews.append(item);
+            });
+
+            if (selectedPhotos.length) {
+                const count = document.createElement('p');
+                count.className = 'vision-preview-count';
+                count.textContent = `${selectedPhotos.length} of ${maxPhotos} photos selected`;
+                photoPreviews.append(count);
+            }
+        };
+
+        photoInput?.addEventListener('change', () => {
+            const incoming = Array.from(photoInput.files || []);
+            const invalid = incoming.find((file) => !acceptedPhotoTypes.has(file.type) || file.size > maxPhotoBytes);
+            if (invalid) {
+                photoInput.value = '';
+                bookingStatus.textContent = 'Each photo must be a JPG, PNG, or WebP under 4 MB.';
+                bookingStatus.classList.add('is-error');
+                return;
+            }
+            if (incoming.length > maxPhotos) {
+                photoInput.value = '';
+                bookingStatus.textContent = 'You can add up to five inspiration photos.';
+                bookingStatus.classList.add('is-error');
+                return;
+            }
+            selectedPhotos = incoming;
+            bookingStatus.textContent = '';
+            bookingStatus.classList.remove('is-error');
+            renderPhotoPreviews();
+        });
 
         requiredFields.forEach((field) => {
             field.addEventListener('input', () => {
@@ -343,7 +440,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        bookingForm.addEventListener('submit', (event) => {
+        bookingForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const invalidField = requiredFields.find((field) => !field.checkValidity());
@@ -357,26 +454,38 @@ window.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const formData = new FormData(bookingForm);
-            const moods = formData.getAll('mood');
-            const bookingEmail = bookingForm.dataset.bookingEmail?.trim();
-            const subject = `Numen Nails inquiry — ${formData.get('service')}`;
-            const body = [
-                `Name: ${formData.get('name')}`,
-                `Email: ${formData.get('email')}`,
-                `Service: ${formData.get('service')}`,
-                `Mood: ${moods.length ? moods.join(', ') : 'Not selected'}`,
-                '',
-                String(formData.get('message') || ''),
-            ].join('\n');
-
             bookingStatus.classList.remove('is-error');
+            bookingStatus.textContent = 'Sending your vision through the forest…';
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.classList.add('is-sending');
+            }
 
-            if (bookingEmail) {
-                bookingStatus.textContent = 'Opening your enchanted message…';
-                window.location.href = `mailto:${bookingEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            } else {
-                bookingStatus.textContent = 'Your vision is ready ✦ Send it through the booking email or Instagram beside this form.';
+            try {
+                const response = await fetch(bookingForm.action, {
+                    method: 'POST',
+                    body: new FormData(bookingForm),
+                    headers: { Accept: 'application/json' },
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(result.message || 'Your vision could not be delivered right now.');
+
+                bookingStatus.textContent = result.message || 'Your vision has been sent ✦';
+                bookingForm.reset();
+                selectedPhotos = [];
+                renderPhotoPreviews();
+                if (startedAtInput) startedAtInput.value = String(Date.now());
+                if (messageCount) messageCount.textContent = '0';
+                if (turnstileWidgetId !== null && window.turnstile) window.turnstile.reset(turnstileWidgetId);
+            } catch (error) {
+                bookingStatus.textContent = error.message || 'Something interrupted the magic. Please try again.';
+                bookingStatus.classList.add('is-error');
+                if (turnstileWidgetId !== null && window.turnstile) window.turnstile.reset(turnstileWidgetId);
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('is-sending');
+                }
             }
         });
     }
