@@ -1,3 +1,3 @@
 window.NUMEN_CONFIG = {
-    turnstileSiteKey: ""
+    turnstileSiteKey: "0x4AAAAAAEBIUbdLyrGeNEts"
 };

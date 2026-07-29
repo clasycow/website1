@@ -12,12 +12,18 @@ keys below are added to the host.
 
 ## Browser configuration
 
-Open `js/config.js` and add the public Turnstile site key:
+The public Turnstile site key is configured in `js/config.js`:
 
 ```js
 window.NUMEN_CONFIG = {
-    turnstileSiteKey: "YOUR_PUBLIC_TURNSTILE_SITE_KEY"
+    turnstileSiteKey: "0x4AAAAAAEBIUbdLyrGeNEts"
 };
+```
+
+The inquiry form submits to the standalone Worker:
+
+```text
+https://numen-inquiries.clasycow.workers.dev/
 ```
 
 ## Private server variables
